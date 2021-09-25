@@ -4,7 +4,7 @@ import requests
 import uvicorn
 from fastapi import FastAPI, status
 from pydantic import EmailStr  # pylint: disable=no-name-in-module
-from pydantic.main import BaseModel # pylint: disable=no-name-in-module
+from pydantic.main import BaseModel  # pylint: disable=no-name-in-module
 from typing import List, Optional
 from starlette.responses import JSONResponse
 
@@ -72,7 +72,7 @@ async def get_users(email_filter: Optional[str] = None):
     logging.INFO("Getting users")
 
     users_filtered = []
-    
+
     for user_id, user in users.items():
         if email_filter:
             if email_filter in user.email:
