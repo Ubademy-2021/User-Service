@@ -13,5 +13,5 @@ RUN poetry install
 
 EXPOSE 5000
 # Use heroku entrypoint
-#CMD poetry run uvicorn "app.main:app" --host 0.0.0.0 --port 5000
-CMD ["bash", "entrypoint.sh"]
+CMD poetry run uvicorn "app.main:app" --host 0.0.0.0 --port 5000
+#CMD ["bash", "entrypoint.sh"]
