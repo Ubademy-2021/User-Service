@@ -5,13 +5,14 @@ RUN pip install poetry
 # copy project requirement files here to ensure they will be cached.
 WORKDIR /root
 ADD app/ app/
-COPY pyproject.toml ./
+COPY docker/entrypoint.sh poetry.lock pyproject.toml ./
 
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
 ENV POETRY_VIRTUALENVS_IN_PROJECT true
 RUN poetry install
 
 EXPOSE 5000
+
 # Use heroku entrypoint
-CMD poetry run uvicorn "app.main:app" --host 0.0.0.0 --port 5000
-#CMD ["bash", "entrypoint.sh"]
+#CMD poetry run uvicorn "app.main:app" --host 0.0.0.0 --port 5000
+CMD ["bash", "entrypoint.sh"]

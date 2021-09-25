@@ -69,8 +69,6 @@ def create_user(username: str, email: str):
 
 @app.get('/users', response_model=List[UserResponse], status_code=status.HTTP_200_OK)
 async def get_users(email_filter: Optional[str] = None):
-    logging.INFO("Getting users")
-
     users_filtered = []
 
     for user_id, user in users.items():

@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:13
     ports:
-      - "5432:5432"
+      - "5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -20,7 +20,6 @@ services:
     depends_on:
       - db
   pgadmin:
-    container_name: user-service
     image: dpage/pgadmin4
     environment:
       - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
