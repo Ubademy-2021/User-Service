@@ -131,5 +131,4 @@ async def delete_users(user_id: str):
 
 if __name__ == "__main__":
     port = os.environ.get('PORT', 5000)
-    logging.info("App listening on port: ", port)
     uvicorn.run(app, host='0.0.0.0', port=port)
