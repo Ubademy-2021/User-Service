@@ -57,14 +57,14 @@ def get_random():
         if response.status_code != 200:
             return None
     except requests.exceptions.ConnectionError as e:
-        return None
+        return e.__cause__
     return response.json()
 
 
 def create_user(username: str, email: str):
     user_id = str(uuid.uuid4())
     random = get_random()
-    new_user = User(id=user_id, username=username, email=email, random=random)
+    new_user = User(id=user_id, username=username, email=email, random=random,)
     users[user_id] = new_user
     return new_user
 
@@ -85,22 +85,34 @@ async def get_users(email_filter: Optional[str] = None):
 @app.post('/users', response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_users(user_request: UserRequest):
     if not validate_username(user_request.username, users):
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
-                            content=f'User {user_request.username} already exists', )
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content=f'User {user_request.username} already exists',
+        )
     return create_user(user_request.username, user_request.email)
 
 
-@app.get('/users/{user_id}', response_model=UserResponse, status_code=status.HTTP_200_OK)
+@app.get(
+    '/users/{user_id}', response_model=UserResponse, status_code=status.HTTP_200_OK
+)
 async def get_user(user_id: str):
     if user_id not in users:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found', )
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found',
+        )
     return users[user_id]
 
 
-@app.patch('/users/{user_id}', response_model=UserResponse, status_code=status.HTTP_202_ACCEPTED)
+@app.patch(
+    '/users/{user_id}',
+    response_model=UserResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
 async def update_users(user_id: str, update_user_request: UpdateUserRequest):
     if user_id not in users:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found', )
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found',
+        )
     user = users[user_id]
     user.email = update_user_request.email
     users[user_id] = user
@@ -110,7 +122,9 @@ async def update_users(user_id: str, update_user_request: UpdateUserRequest):
 @app.delete('/users/{user_id}', status_code=status.HTTP_202_ACCEPTED)
 async def delete_users(user_id: str):
     if user_id not in users:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found', )
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND, content=f'User {user_id} not found',
+        )
     users.pop(user_id)
     return
 
