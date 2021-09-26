@@ -9,7 +9,8 @@ from pydantic.main import BaseModel  # pylint: disable=no-name-in-module
 from typing import List, Optional
 from starlette.responses import JSONResponse
 
-app = FastAPI()
+# Create app with FAST API
+app = FastAPI(debug=True)
 
 
 class UserRequest(BaseModel):
@@ -115,4 +116,6 @@ async def delete_users(user_id: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', port=os.environ.get('PORT', 5000))
+    port = os.environ.get('PORT', 5000)
+    logging.info("App listening on port: ", port)
+    uvicorn.run(app, host='0.0.0.0', port=port)

@@ -11,7 +11,7 @@ COPY docker/entrypoint.sh poetry.lock pyproject.toml ./
 ENV POETRY_VIRTUALENVS_IN_PROJECT true
 RUN poetry install
 
-#EXPOSE 5000
+EXPOSE $PORT
 
 # Use heroku entrypoint
 #CMD poetry run uvicorn "app.main:app" --host 0.0.0.0 --port 5000
