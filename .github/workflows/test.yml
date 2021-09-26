@@ -6,7 +6,6 @@ on:
       - 'docs/**' # workflow will not run when all the path names match pattern
     branches:
       - main
-      - 'feature/**'
   pull_request:
     paths-ignore:
       - 'docs/**' # workflow will not run when all the path names match pattern
