@@ -1,8 +1,9 @@
+"""
 from databases import DatabaseURL
 from starlette.config import Config
 from starlette.datastructures import Secret
 
-"""
+
 config = Config(".env")
 PROJECT_NAME = "phresh"
 VERSION = "1.0.0"
@@ -28,4 +29,6 @@ POSTGRES_DB = "dcmlmhd3ipa6a5"
 
 # "postgres://dnelosexrgszoz:d0bcea04baf4cb598c261aea150aed55871cc7e65778b78c29b6201f98ddc98a@ec2-34-194-123-31.compute-1.amazonaws.com:5432/dcmlmhd3ipa6a5"
 
-DATABASE_URL = "postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
+# DATABASE_URL = "postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
+
+DATABASE_URL = "postgres://dnelosexrgszoz:d0bcea04baf4cb598c261aea150aed55871cc7e65778b78c29b6201f98ddc98a@ec2-34-194-123-31.compute-1.amazonaws.com:5432/dcmlmhd3ipa6a5"

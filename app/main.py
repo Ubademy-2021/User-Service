@@ -1,11 +1,9 @@
-import logging
 import os
-import uuid
 import uvicorn
 from fastapi import FastAPI, status
 from app.adapters.http.users import users_controller
 from app.adapters.database.users.model import Base
-from app.adapters.database.database import SessionLocal, engine
+from app.adapters.database.database import engine
 
 Base.metadata.create_all(bind=engine)
 

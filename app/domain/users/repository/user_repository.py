@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.domain.users.model.user import User, UserCreate
+from app.domain.users.model.user import UserCreate
 from app.adapters.database.users.model import UserDTO
 
 

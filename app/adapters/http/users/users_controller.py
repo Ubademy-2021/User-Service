@@ -1,4 +1,4 @@
-from app.adapters.database.database import SessionLocal, engine
+from app.adapters.database.database import SessionLocal
 from app.domain.users.model.user import UserCreate, User
 from app.domain.users.repository.user_repository import UserRepository
 from fastapi import Depends, APIRouter, HTTPException
