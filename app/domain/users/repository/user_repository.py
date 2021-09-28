@@ -3,7 +3,7 @@ from app.domain.users.model.user import User, UserCreate
 from app.adapters.database.users.model import UserDTO
 
 
-class UserRepository():
+class UserRepository:
     def __init__(self, session: Session):
         self.session: Session = session
 
