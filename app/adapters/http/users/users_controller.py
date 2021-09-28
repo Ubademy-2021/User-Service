@@ -4,8 +4,11 @@ from app.adapters.database.users.model import UserDTO
 from app.domain.users.repository.user_repository import UserRepository
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
+
 
 router = APIRouter(tags=["users"])
+
 
 # Dependency
 def get_db():
@@ -24,11 +27,13 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
 
+
 @router.get("/users/", response_model=List[UserDTO])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     crud = UserRepository(db)
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
+
 
 @router.get("/users/{user_id}", response_model=UserDTO)
 def read_user(user_id: int, db: Session = Depends(get_db)):

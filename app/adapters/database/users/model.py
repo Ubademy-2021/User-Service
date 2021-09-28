@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from app.adapters.database.database import Base
-#catedra hacen Base=declarative_base()
+# catedra hacen Base=declarative_base()
 
 
 class UserDTO(Base):
@@ -11,4 +11,3 @@ class UserDTO(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-
