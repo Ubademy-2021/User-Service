@@ -18,7 +18,7 @@ async def root():
     return "pong"
 
 
-app.include_router(users_controller.router, prefix="/0.0.1")
+app.include_router(users_controller.router, prefix="/api")
 
 if __name__ == "__main__":
     port = os.environ.get('PORT', 5000)

@@ -1,6 +1,5 @@
 from app.adapters.database.database import SessionLocal, engine
 from app.domain.users.model.user import UserCreate, User
-from app.adapters.database.users.model import UserDTO
 from app.domain.users.repository.user_repository import UserRepository
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
@@ -19,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/users/", response_model=User)
+@router.post("/users", response_model=User)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     crud = UserRepository(db)
     db_user = crud.get_user_by_email(email=user.email)
@@ -28,7 +27,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(user=user)
 
 
-@router.get("/users/", response_model=List[User])
+@router.get("/users", response_model=List[User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     crud = UserRepository(db)
     users = crud.get_users(skip=skip, limit=limit)
