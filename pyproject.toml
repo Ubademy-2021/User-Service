@@ -9,7 +9,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 fastapi = "^0.66.0"
 uvicorn = "^0.14.0"
 pydantic = {extras = ["email"], version = "^1.8.1"}
