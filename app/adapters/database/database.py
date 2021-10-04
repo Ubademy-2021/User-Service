@@ -1,7 +1,8 @@
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from app.core.config import DATABASE_URL
+from app.core.config import DATABASE_URL, POSTGRES_SERVER
 
 
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
@@ -15,6 +16,8 @@ def get_database_url(database_url: str) -> str:
         return uri.replace("postgres://", "postgresql://", 1)
     return uri
 
+
+logging.info("Logging into the following database: " + POSTGRES_SERVER)
 
 engine = create_engine(get_database_url(SQLALCHEMY_DATABASE_URL))
 
