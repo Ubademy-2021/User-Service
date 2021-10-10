@@ -14,7 +14,12 @@ class LogConfig(BaseModel):
     version = 1
     disable_existing_loggers = False
     formatters = {
-        "default": {
+        "console": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": LOG_FORMAT,
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "file": {
             "()": "uvicorn.logging.DefaultFormatter",
             "fmt": LOG_FORMAT,
             "datefmt": "%Y-%m-%d %H:%M:%S",
@@ -22,18 +27,18 @@ class LogConfig(BaseModel):
     }
     handlers = {
         "console": {
-            "formatter": "default",
+            "formatter": "console",
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stderr",
         },
         "file": {
-            "formatter": "default",
+            "formatter": "file",
             "class": "logging.FileHandler",
             "filename": "user-service.log",
         },
     }
     loggers = {
-        "User-Service-Log": {"handlers": ["console", "file"], "level": LOG_LEVEL},
+        LOGGER_NAME: {"handlers": ["console", "file"], "level": LOG_LEVEL},
     }
 
 

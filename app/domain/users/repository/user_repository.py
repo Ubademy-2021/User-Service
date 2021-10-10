@@ -13,12 +13,16 @@ class UserRepository:
     def get_user_by_email(self, email: str):
         return self.session.query(UserDTO).filter(UserDTO.email == email).first()
 
+    def get_user_by_username(self, username: str):
+        return self.session.query(UserDTO).filter(UserDTO.user_name == username).first()
+
     def get_users(self, skip: int = 0, limit: int = 100):
         return self.session.query(UserDTO).offset(skip).limit(limit).all()
 
     def create_user(self, user: UserCreate):
-        fake_hashed_password = user.password + "notreallyhashed"
-        session_user = UserDTO(email=user.email, hashed_password=fake_hashed_password)
+        user.password = user.password + "notreallyhashed"
+        session_user = UserDTO()
+        session_user.initWithUserCreate(user)
         self.session.add(session_user)
         self.session.commit()
         self.session.refresh(session_user)

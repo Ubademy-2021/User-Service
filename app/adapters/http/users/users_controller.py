@@ -17,7 +17,7 @@ def get_db():
     try:
         yield db
     except Exception as e:
-        logger.critical("Database connection failed: " + e.__str__)
+        logger.critical("Database error: " + e.__str__())
     finally:
         db.close()
 
@@ -25,11 +25,18 @@ def get_db():
 @router.post("/users", response_model=User)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     logger.info("Creating user " + user.email)
+    if not user.isComplete():
+        logger.warn("Required fields are not complete")
+        raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
     db_user = crud.get_user_by_email(email=user.email)
     if db_user:
         logger.warn("User " + user.email + " already exsists")
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="Email " + user.email + " already registered")
+    db_user = crud.get_user_by_username(username=user.user_name)
+    if db_user:
+        logger.warn("Username " + user.user_name + " already in use")
+        raise HTTPException(status_code=400, detail="Username " + user.user_name + " already in use")
     return crud.create_user(user=user)
 
 
