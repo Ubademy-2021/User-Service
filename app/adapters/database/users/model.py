@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import null
 from app.adapters.database.database import Base
 from app.domain.users.model.user import UserCreate
-from app.core.logger import logger
 
 # catedra hacen Base=declarative_base()
 
