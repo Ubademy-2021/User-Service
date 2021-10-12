@@ -17,7 +17,7 @@ def get_db():
     try:
         yield db
     except Exception as e:
-        logger.critical("Database connection failed: " + e.__str__)
+        logger.critical("Internal Error: " + e.__str__())
     finally:
         db.close()
 
@@ -25,11 +25,12 @@ def get_db():
 @router.post("/users", response_model=User)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     logger.info("Creating user " + user.email)
+    if not user.isComplete():
+        logger.warn("Required fields are not complete")
+        raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
-    db_user = crud.get_user_by_email(email=user.email)
-    if db_user:
-        logger.warn("User " + user.email + " already exsists")
-        raise HTTPException(status_code=400, detail="Email already registered")
+    check_email(crud, user.email)
+    check_username(crud, user.user_name)
     return crud.create_user(user=user)
 
 
@@ -44,10 +45,29 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @router.get("/users/{user_id}", response_model=User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
-    logger.info("Getting user with id = " + user_id)
+    logger.info("Getting user with id = " + str(user_id))
     crud = UserRepository(db)
-    db_user = crud.get_user(user_id=user_id)
+    db_user = check_id_exists(crud, user_id)
+    return db_user
+
+
+def check_username(userRepository, username):
+    db_user = userRepository.get_user_by_username(username=username)
+    if db_user:
+        logger.warn("Username " + username + " already in use")
+        raise HTTPException(status_code=400, detail="Username " + username + " already in use")
+
+
+def check_email(userRepository, email):
+    db_user = userRepository.get_user_by_email(email=email)
+    if db_user:
+        logger.warn("User " + email + " already exsists")
+        raise HTTPException(status_code=400, detail="Email " + email + " already registered")
+
+
+def check_id_exists(userRepository, user_id):
+    db_user = userRepository.get_user(user_id=user_id)
     if db_user is None:
-        logger.warning("User with id = " + user_id + " not found")
+        logger.warning("User with id = " + str(user_id) + " not found")
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
