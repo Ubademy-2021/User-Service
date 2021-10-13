@@ -12,31 +12,28 @@ class UserDTO(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    user_name = Column(String, unique=True)
+    userName = Column(String, unique=True)
     name = Column(String)
-    last_name = Column(String)
-    phone_number = Column(String, nullable=True, default=None)
-    street = Column(String)
-    street_nbr = Column(Integer)
-    floor_appt = Column(String)
-    local = Column(String)
-    postal_code = Column(String)
-    is_active = Column(Boolean, default=True)
+    surname = Column(String)
+    phoneNumber = Column(String, nullable=True, default=None)
+    city = Column(String)
+    state = Column(String)
+    country = Column(String)
+    address = Column(String)
+    isBlock = Column(Boolean, default=True)
 
     categories = relationship("UserCategoryDTO", back_populates="user")
 
     def initWithUserCreate(self, user: UserCreate):
 
         self.email = user.email
-        self.hashed_password = user.password
-        self.user_name = user.user_name
+        self.userName = user.userName
         self.name = user.name
-        self.last_name = user.last_name
-        if user.phone_number:
-            self.phone_number = user.phone_number
-        self.street = user.street
-        self.street_nbr = user.street_nbr
-        self.floor_appt = user.floor_appt
-        self.local = user.local
-        self.postal_code = user.postal_code
+        self.surname = user.surname
+        if user.phoneNumber:
+            self.phoneNumber = user.phoneNumber
+        self.city = user.city
+        self.state = user.state
+        self.country = user.country
+        self.address = user.address
+        self.isBlock = False

@@ -30,7 +30,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
     check_email(crud, user.email)
-    check_username(crud, user.user_name)
+    check_username(crud, user.userName)
     return crud.create_user(user=user)
 
 
