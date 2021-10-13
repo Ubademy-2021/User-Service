@@ -9,8 +9,8 @@ class UserCategoryRepository:
         self.session: Session = session
 
     def get_user_category(self, userId, categoryId):
-        return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.userId == userId
-                                                          and UserCategoryDTO.categoryId == categoryId).first()
+        return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.userId == userId)\
+            .filter(UserCategoryDTO.categoryId == categoryId).first()
 
     def get_categories_by_user(self, userId, skip: int = 0, limit: int = 100):
         return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.userId == userId).offset(skip).limit(limit).all()
