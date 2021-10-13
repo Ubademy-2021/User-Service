@@ -10,6 +10,8 @@ class CategoryDTO(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
 
+    users = relationship("UserCategoryDTO", back_populates="category")
+
     def initWithCategoryBase(self, category: CategoryBase):
 
         self.name = category.name

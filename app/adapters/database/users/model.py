@@ -24,6 +24,8 @@ class UserDTO(Base):
     postal_code = Column(String)
     is_active = Column(Boolean, default=True)
 
+    categories = relationship("UserCategoryDTO", back_populates="user")
+
     def initWithUserCreate(self, user: UserCreate):
 
         self.email = user.email

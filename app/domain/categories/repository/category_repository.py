@@ -16,7 +16,7 @@ class CategoryRepository:
     def get_categories(self, skip: int = 0, limit: int = 100):
         return self.session.query(CategoryDTO).offset(skip).limit(limit).all()
 
-    def create_user(self, category: CategoryBase):
+    def create_category(self, category: CategoryBase):
         session_category = CategoryDTO()
         session_category.initWithCategoryBase(category)
         self.session.add(session_category)
