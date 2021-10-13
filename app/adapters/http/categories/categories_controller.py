@@ -7,7 +7,9 @@ from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.core.logger import logger
+from app.domain.userCategories.model.userCategory import UserCategory
 from app.domain.userCategories.repository.userCategoryRepository import UserCategoryRepository
+from app.domain.users.repository.user_repository import UserRepository
 
 
 router = APIRouter(tags=["categories"])
@@ -50,7 +52,18 @@ def read_categories_from_user(userId, skip: int = 0, limit: int = 100, db: Sessi
     crud = UserCategoryRepository(db)
     categories = crud.get_categories_by_user(userId, skip=skip, limit=limit)
     logger.debug("Getting " + str(categories.count(UserCategoryDTO)) + " categories")
-    return categories
+    return list(map(UserCategoryDTO.getCategory, categories))
+
+
+@router.post("/categories/user", response_model=UserCategory)
+def create_user_category(userCategory: UserCategory, db: Session = Depends(get_db)):
+    logger.info("Adding category to user")
+    if (not userCategory.userId or not userCategory.categoryId):
+        logger.warn("Required fields are not complete")
+        raise HTTPException(status_code=400, detail="Required fields are not complete")
+    crud = UserCategoryRepository(db)
+    check_user_category(db, userCategory)
+    return crud.create_user_category(userCategory)
 
 
 def check_category(categoryRepository: CategoryRepository, category_name):
@@ -58,3 +71,21 @@ def check_category(categoryRepository: CategoryRepository, category_name):
     if db_category:
         logger.warn("Category " + category_name + " already exists")
         raise HTTPException(status_code=400, detail="Category " + category_name + " already exists")
+
+
+def check_user_category(db: Session, userCategory: UserCategory):
+    userCategoryRepository = UserCategoryRepository(db)
+    db_user_category = userCategoryRepository.get_user_category(userCategory.userId, userCategory.categoryId)
+    if db_user_category:
+        logger.warn("User already has category")
+        raise HTTPException(status_code=400, detail="User already has category")
+    userRepository = UserRepository(db)
+    db_user = userRepository.get_user(userCategory.userId)
+    if not db_user:
+        logger.warn("User " + str(userCategory.userId) + " does not exist")
+        raise HTTPException(status_code=400, detail="User " + str(userCategory.userId) + " does not exist")
+    categoryRepository = CategoryRepository(db)
+    db_category = categoryRepository.get_category(userCategory.categoryId)
+    if not db_category:
+        logger.warn("Category " + str(userCategory.categoryId) + " does not exist")
+        raise HTTPException(status_code=400, detail="Category " + str(userCategory.categoryId) + " does not exist")

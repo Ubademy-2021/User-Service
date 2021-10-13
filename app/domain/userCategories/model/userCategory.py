@@ -2,5 +2,8 @@ from pydantic import BaseModel
 
 
 class UserCategory(BaseModel):
-    userId: str
-    categoryId: str
+    userId: int
+    categoryId: int
+
+    class Config:
+        orm_mode = True
