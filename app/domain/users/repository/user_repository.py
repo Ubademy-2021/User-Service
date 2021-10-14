@@ -1,4 +1,6 @@
 from sqlalchemy.orm import Session
+from starlette.exceptions import HTTPException
+from app.domain.exceptions.user_not_found_error import UserNotFoundError
 from app.domain.users.model.user import UserCreate
 from app.adapters.database.users.model import UserDTO
 
@@ -26,3 +28,20 @@ class UserRepository:
         self.session.commit()
         self.session.refresh(session_user)
         return session_user
+
+    def update_user(self, db_user_id: int, user_updated: UserCreate):
+        # Get the existing data
+        db_user = (
+            self.session.query(UserDTO).filter(UserDTO.id == db_user_id).one_or_none()
+        )
+        if db_user is None:
+            raise UserNotFoundError()
+
+        # Update model class variable from requested fields
+        for var, value in vars(user_updated).items():
+            setattr(db_user, var, value) if value or str(value) == 'False' else None
+
+        self.session.add(db_user)
+        self.session.commit()
+        self.session.refresh(db_user)
+        return db_user

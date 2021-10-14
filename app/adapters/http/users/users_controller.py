@@ -1,12 +1,12 @@
 from app.adapters.database.database import SessionLocal
 from app.adapters.database.users.model import UserDTO
+from app.domain.exceptions.user_not_found_error import UserNotFoundError
 from app.domain.users.model.user import UserCreate, User
 from app.domain.users.repository.user_repository import UserRepository
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.core.logger import logger
-
 
 router = APIRouter(tags=["users"])
 
@@ -32,6 +32,20 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     check_email(crud, user.email)
     check_username(crud, user.userName)
     return crud.create_user(user=user)
+
+
+@router.put("/users/{user_id}", response_model=User)
+def update_user(user_id: int, user_updated: UserCreate, db: Session = Depends(get_db)):
+    logger.info("Updating user with id " + str(user_id))
+    crud = UserRepository(db)
+
+    try:
+        user_updated = crud.update_user(user_id, user_updated)
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=404, detail=e.message)
+
+    logger.info("User user with id " + str(user_id) + " updates successfully")
+    return user_updated
 
 
 @router.get("/users", response_model=List[User])
