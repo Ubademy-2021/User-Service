@@ -9,14 +9,30 @@ class UserCategoryRepository:
         self.session: Session = session
 
     def get_user_category(self, userId, categoryId):
-        return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.userId == userId)\
-            .filter(UserCategoryDTO.categoryId == categoryId).first()
+        return (
+            self.session.query(UserCategoryDTO)
+            .filter(UserCategoryDTO.userId == userId)
+            .filter(UserCategoryDTO.categoryId == categoryId)
+            .first()
+        )
 
     def get_categories_by_user(self, userId, skip: int = 0, limit: int = 100):
-        return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.userId == userId).offset(skip).limit(limit).all()
+        return (
+            self.session.query(UserCategoryDTO)
+            .filter(UserCategoryDTO.userId == userId)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
     def get_users_by_category(self, categoryId, skip: int = 0, limit: int = 100):
-        return self.session.query(UserCategoryDTO).filter(UserCategoryDTO.categoryId == categoryId).offset(skip).limit(limit).all()
+        return (
+            self.session.query(UserCategoryDTO)
+            .filter(UserCategoryDTO.categoryId == categoryId)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
     def create_user_category(self, userCategory: UserCategory):
         session_userCategory = UserCategoryDTO()

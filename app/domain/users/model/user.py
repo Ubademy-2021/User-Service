@@ -16,10 +16,16 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     def isComplete(self):
-        isNotComplete = (not self.email or not self.address
-                         or not self.userName or not self.name
-                         or not self.surname or not self.country
-                         or not self.city or not self.state)
+        isNotComplete = (
+            not self.email
+            or not self.address
+            or not self.userName
+            or not self.name
+            or not self.surname
+            or not self.country
+            or not self.city
+            or not self.state
+        )
         return not isNotComplete
 
 

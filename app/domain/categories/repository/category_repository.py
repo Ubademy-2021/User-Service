@@ -8,7 +8,11 @@ class CategoryRepository:
         self.session: Session = session
 
     def get_category(self, category_id: int):
-        return self.session.query(CategoryDTO).filter(CategoryDTO.id == category_id).first()
+        return (
+            self.session.query(CategoryDTO)
+            .filter(CategoryDTO.id == category_id)
+            .first()
+        )
 
     def get_category_by_name(self, name: str):
         return self.session.query(CategoryDTO).filter(CategoryDTO.name == name).first()
