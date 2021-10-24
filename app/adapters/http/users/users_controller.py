@@ -65,6 +65,21 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
+@router.post("/users/block/{user_id}", response_model=User)
+def block_user(user_id: int, db: Session = Depends(get_db)):
+    logger.info("Creating user " + str(user_id))
+    crud = UserRepository(db)
+    db_user = check_id_exists(crud, user_id)
+    if(db_user.isBlock):
+        logger.warn("User " + str(user_id) + " already blocked")
+        raise HTTPException(
+            status_code=400, detail=("User " + str(user_id) + " already blocked")
+        )
+    db_user.isBlock = True
+    crud.update_user_with_id(db_user)
+    return db_user
+
+
 def check_username(userRepository: UserRepository, username):
     db_user = userRepository.get_user_by_username(username=username)
     if db_user:

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException
 from app.domain.exceptions.user_not_found_error import UserNotFoundError
-from app.domain.users.model.user import UserCreate
+from app.domain.users.model.user import User, UserCreate
 from app.adapters.database.users.model import UserDTO
 
 
@@ -45,3 +45,10 @@ class UserRepository:
         self.session.commit()
         self.session.refresh(db_user)
         return db_user
+
+    def update_user_with_id(self, user_updated: User):
+        # Only use with user gotten from database
+        self.session.add(user_updated)
+        self.session.commit()
+        self.session.refresh(user_updated)
+        return user_updated
