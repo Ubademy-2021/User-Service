@@ -2,11 +2,13 @@ from app.adapters.database.database import SessionLocal
 from app.adapters.database.users.model import UserDTO
 from app.domain.exceptions.user_not_found_error import UserNotFoundError
 from app.domain.users.model.user import UserCreate, User
+from app.domain.email import Email
 from app.domain.users.repository.user_repository import UserRepository
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.core.logger import logger
+from app.adapters.http.util.userUtil import UserUtil
 
 router = APIRouter(tags=["users"])
 
@@ -29,8 +31,8 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         logger.warn("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
-    check_email(crud, user.email)
-    check_username(crud, user.userName)
+    UserUtil.check_email(crud, user.email)
+    UserUtil.check_username(crud, user.userName)
     return crud.create_user(user=user)
 
 
@@ -61,15 +63,24 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def read_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Getting user with id = " + str(user_id))
     crud = UserRepository(db)
-    db_user = check_id_exists(crud, user_id)
+    db_user = UserUtil.check_id_exists(crud, user_id)
     return db_user
+
+
+@router.get("/user", response_model=User)
+def read_user_from_email(email: Email, db: Session = Depends(get_db)):
+    emailStr = email.email
+    logger.info("Getting user " + emailStr)
+    crud = UserRepository(db)
+    users = UserUtil.check_email_exists(crud, emailStr)
+    return users
 
 
 @router.post("/users/block/{user_id}", response_model=User)
 def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
     crud = UserRepository(db)
-    db_user = check_id_exists(crud, user_id)
+    db_user = UserUtil.check_id_exists(crud, user_id)
     if(db_user.isBlock):
         logger.warn("User " + str(user_id) + " already blocked")
         raise HTTPException(
@@ -77,30 +88,4 @@ def block_user(user_id: int, db: Session = Depends(get_db)):
         )
     db_user.isBlock = True
     crud.update_user_with_id(db_user)
-    return db_user
-
-
-def check_username(userRepository: UserRepository, username):
-    db_user = userRepository.get_user_by_username(username=username)
-    if db_user:
-        logger.warn("Username " + username + " already in use")
-        raise HTTPException(
-            status_code=400, detail="Username " + username + " already in use"
-        )
-
-
-def check_email(userRepository: UserRepository, email):
-    db_user = userRepository.get_user_by_email(email=email)
-    if db_user:
-        logger.warn("User " + email + " already exsists")
-        raise HTTPException(
-            status_code=400, detail="Email " + email + " already registered"
-        )
-
-
-def check_id_exists(userRepository: UserRepository, user_id):
-    db_user = userRepository.get_user(user_id=user_id)
-    if db_user is None:
-        logger.warning("User with id = " + str(user_id) + " not found")
-        raise HTTPException(status_code=404, detail="User not found")
     return db_user
