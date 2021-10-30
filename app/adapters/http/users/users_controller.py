@@ -70,7 +70,7 @@ def read_user(
         users.append(UserUtil.check_email_exists(crud, email))
     else:
         users = crud.get_users(skip=skip, limit=limit)
-        logger.debug("Getting " + str(users.count(UserDTO)) + " users")
+        logger.debug("Getting all users")
         return users
 
     return users
