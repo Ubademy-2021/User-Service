@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.core.logger import logger
 from app.adapters.http.util.userUtil import UserUtil
+from typing import Optional
 
 router = APIRouter(tags=["users"])
 
@@ -50,7 +51,7 @@ def update_user(user_id: int, user_updated: UserCreate, db: Session = Depends(ge
     return user_updated
 
 
-@router.get("/users", response_model=List[User])
+# @router.get("/users", response_model=List[User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     logger.info("Getting users list")
     crud = UserRepository(db)
@@ -59,11 +60,23 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
-@router.get("/users/{user_id}", response_model=User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    logger.info("Getting user with id = " + str(user_id))
+@router.get("/users", response_model=User)
+def read_user(
+    user_id: Optional[int] = None,
+    email: Optional[str] = None,
+    skip: Optional[int] = 0,
+    limit: Optional[int] = 100,
+    db: Session = Depends(get_db),
+):
     crud = UserRepository(db)
-    db_user = UserUtil.check_id_exists(crud, user_id)
+
+    if user_id:
+        logger.info("Getting user with id = " + str(user_id))
+        db_user = UserUtil.check_id_exists(crud, user_id)
+    elif email:
+        logger.info("Getting user with email = " + email)
+        db_user = UserUtil.check_id_exists(crud, user_id)
+
     return db_user
 
 
@@ -81,7 +94,7 @@ def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
     crud = UserRepository(db)
     db_user = UserUtil.check_id_exists(crud, user_id)
-    if(db_user.isBlock):
+    if db_user.isBlock:
         logger.warn("User " + str(user_id) + " already blocked")
         raise HTTPException(
             status_code=400, detail=("User " + str(user_id) + " already blocked")
