@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.core.logger import logger
 from app.adapters.http.util.userUtil import UserUtil
+from typing import Optional
 
 router = APIRouter(tags=["users"])
 
@@ -51,28 +52,27 @@ def update_user(user_id: int, user_updated: UserCreate, db: Session = Depends(ge
 
 
 @router.get("/users", response_model=List[User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    logger.info("Getting users list")
+def read_user(
+    user_id: Optional[int] = None,
+    email: Optional[str] = None,
+    skip: Optional[int] = 0,
+    limit: Optional[int] = 100,
+    db: Session = Depends(get_db),
+):
     crud = UserRepository(db)
-    users = crud.get_users(skip=skip, limit=limit)
-    logger.debug("Getting " + str(users.count(UserDTO)) + " users")
-    return users
+    users = []
 
+    if user_id:
+        logger.info("Getting user with id = " + str(user_id))
+        users.append(UserUtil.check_id_exists(crud, user_id))
+    elif email:
+        logger.info("Getting user with email = " + email)
+        users.append(UserUtil.check_email_exists(crud, email))
+    else:
+        users = crud.get_users(skip=skip, limit=limit)
+        logger.debug("Getting all users")
+        return users
 
-@router.get("/users/{user_id}", response_model=User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    logger.info("Getting user with id = " + str(user_id))
-    crud = UserRepository(db)
-    db_user = UserUtil.check_id_exists(crud, user_id)
-    return db_user
-
-
-@router.get("/user", response_model=User)
-def read_user_from_email(email: Email, db: Session = Depends(get_db)):
-    emailStr = email.email
-    logger.info("Getting user " + emailStr)
-    crud = UserRepository(db)
-    users = UserUtil.check_email_exists(crud, emailStr)
     return users
 
 
@@ -81,7 +81,7 @@ def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
     crud = UserRepository(db)
     db_user = UserUtil.check_id_exists(crud, user_id)
-    if(db_user.isBlock):
+    if db_user.isBlock:
         logger.warn("User " + str(user_id) + " already blocked")
         raise HTTPException(
             status_code=400, detail=("User " + str(user_id) + " already blocked")
