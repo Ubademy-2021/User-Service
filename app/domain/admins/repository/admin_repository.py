@@ -13,9 +13,12 @@ class AdminRepository:
     def get_admins(self, skip: int = 0, limit: int = 100):
         return self.session.query(AdminDTO).offset(skip).limit(limit).all()
 
-    def create_user(self, admin: AdminBase):
+    def get_admin(self, admin_id: int):
+        return self.session.query(AdminDTO).filter(AdminDTO.id == admin_id).first()
+
+    def create_admin(self, admin: AdminBase):
         session_admin = AdminDTO()
-        session_admin.initWithUserCreate(admin)
+        session_admin.initWithAdminCreate(admin)
         self.session.add(session_admin)
         self.session.commit()
         self.session.refresh(session_admin)
