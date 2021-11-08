@@ -21,6 +21,9 @@ class UserRepository:
     def get_users(self, skip: int = 0, limit: int = 100):
         return self.session.query(UserDTO).offset(skip).limit(limit).all()
 
+    def get_active_users(self):
+        return self.session.query(UserDTO).filter(UserDTO.isBlock is False).all()
+
     def create_user(self, user: UserCreate):
         session_user = UserDTO()
         session_user.initWithUserCreate(user)

@@ -76,6 +76,14 @@ def read_user(
     return users
 
 
+@router.get("/users/active", response_model=List[User])
+def read_active_users(db: Session = Depends(get_db)):
+    crud = UserRepository(db)
+    users = crud.get_active_users()
+
+    return users
+
+
 @router.post("/users/block/{user_id}", response_model=User)
 def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
