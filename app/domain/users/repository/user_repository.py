@@ -22,7 +22,7 @@ class UserRepository:
         return self.session.query(UserDTO).offset(skip).limit(limit).all()
 
     def get_active_users(self):
-        return self.session.query(UserDTO).filter(UserDTO.isBlock is False).all()
+        return self.session.query(UserDTO).filter(UserDTO.isBlock == False).all()
 
     def create_user(self, user: UserCreate):
         session_user = UserDTO()
