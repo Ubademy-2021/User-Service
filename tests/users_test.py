@@ -11,11 +11,6 @@ def test_get_users():
     assert response.status_code == 200
 
 
-def test_get_sprecific_user():
-    response = client.get("/api/users/1")
-    assert response.status_code == 200
-
-
 """
 def test_post_users():
     randomString = "test" + str(randint(0, 10000000000))
