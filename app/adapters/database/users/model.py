@@ -23,6 +23,7 @@ class UserDTO(Base):
     isBlock = Column(Boolean, default=True)
 
     categories = relationship("UserCategoryDTO", back_populates="user")
+    favoriteCourses = relationship("FavoriteCourseDTO", back_populates="user")
 
     def initWithUserCreate(self, user: UserCreate):
 

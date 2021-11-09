@@ -32,8 +32,8 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         logger.warn("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
-    UserUtil.check_email(crud, user.email)
-    UserUtil.check_username(crud, user.userName)
+    UserUtil.check_email(db, user.email)
+    UserUtil.check_username(db, user.userName)
     return crud.create_user(user=user)
 
 
@@ -64,10 +64,10 @@ def read_user(
 
     if user_id:
         logger.info("Getting user with id = " + str(user_id))
-        users.append(UserUtil.check_id_exists(crud, user_id))
+        users.append(UserUtil.check_user_exists(db, user_id))
     elif email:
         logger.info("Getting user with email = " + email)
-        users.append(UserUtil.check_email_exists(crud, email))
+        users.append(UserUtil.check_email_exists(db, email))
     else:
         users = crud.get_users(skip=skip, limit=limit)
         logger.debug("Getting all users")
@@ -88,7 +88,7 @@ def read_active_users(db: Session = Depends(get_db)):
 def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
     crud = UserRepository(db)
-    db_user = UserUtil.check_id_exists(crud, user_id)
+    db_user = UserUtil.check_user_exists(db, user_id)
     if db_user.isBlock:
         logger.warn("User " + str(user_id) + " already blocked")
         raise HTTPException(
