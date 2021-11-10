@@ -17,3 +17,6 @@ class UserCategoryDTO(Base):
 
         self.userId = userCategory.userId
         self.categoryId = userCategory.categoryId
+
+    def getCategoryId(self):
+        return self.categoryId
