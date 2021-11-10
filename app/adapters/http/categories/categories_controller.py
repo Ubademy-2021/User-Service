@@ -3,6 +3,7 @@ from app.adapters.database.userCategories.model import UserCategoryDTO
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.core.logger import logger
 from app.domain.userCategories.model.userCategory import UserCategory
 from app.domain.userCategories.repository.userCategoryRepository import UserCategoryRepository
@@ -23,7 +24,7 @@ def get_db():
         db.close()
 
 
-@router.get("/categories/{userId}", response_model=List[UserCategory])
+@router.get("/categories/{userId}")
 def read_categories_from_user(
     userId, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
@@ -31,7 +32,7 @@ def read_categories_from_user(
     crud = UserCategoryRepository(db)
     categories = crud.get_categories_by_user(userId, skip=skip, limit=limit)
     logger.debug("Getting " + str(len(categories)) + " categories")
-    return categories
+    return CourseServiceUtil.getCategoriesWithIds(list(map(UserCategoryDTO.getCategoryId, categories)))
 
 
 @router.post("/categories/user", response_model=UserCategory)

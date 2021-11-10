@@ -3,6 +3,7 @@ from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.adapters.database.favoriteCourses.model import FavoriteCourseDTO
+from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.adapters.http.util.favoriteCourseUtil import FavoriteCourseUtil
 from app.core.logger import logger
 from app.domain.favoriteCourses.model.favoriteCourse import FavoriteCourse
@@ -37,7 +38,7 @@ def add_favorite_course(favoriteCourse: FavoriteCourse, db: Session = Depends(ge
     return crud.create_favorite_course(favoriteCourse)
 
 
-@router.get("/users/favorites/{userId}", response_model=List[FavoriteCourse])
+@router.get("/users/favorites/{userId}")
 def read_favorite_courses(
     userId, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):
@@ -45,7 +46,7 @@ def read_favorite_courses(
     crud = FavoriteCourseRepository(db)
     favorites = crud.get_favorites_by_user(userId, skip=skip, limit=limit)
     logger.debug("Getting " + str(len(favorites)) + " courses")
-    return favorites
+    return CourseServiceUtil.getCoursesWithIds(list(map(FavoriteCourseDTO.getCourseId, favorites)))
 
 
 @router.delete("/users/favorites")
