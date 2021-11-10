@@ -17,3 +17,6 @@ class FavoriteCourseDTO(Base):
 
         self.userId = favoriteCourse.userId
         self.courseId = favoriteCourse.courseId
+
+    def getCourseId(self):
+        return self.courseId
