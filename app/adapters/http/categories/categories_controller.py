@@ -30,7 +30,7 @@ def read_categories_from_user(
     logger.info("Getting categories list of user " + str(userId))
     crud = UserCategoryRepository(db)
     categories = crud.get_categories_by_user(userId, skip=skip, limit=limit)
-    logger.debug("Getting " + str(categories.count(UserCategoryDTO)) + " categories")
+    logger.debug("Getting " + str(len(categories)) + " categories")
     return categories
 
 

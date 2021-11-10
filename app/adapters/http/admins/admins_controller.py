@@ -42,8 +42,9 @@ def read_admin(
         logger.info("Getting admin with email = " + email)
         admins.append(AdminUtil.check_email_exists(db, email))
     else:
+        logger.info("Getting all admins")
         admins = crud.get_admins(skip=skip, limit=limit)
-        logger.debug("Getting all admins")
+        logger.debug("Getting " + str(len(admins)) + " admins")
         return admins
 
     return admins

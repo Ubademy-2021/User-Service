@@ -44,7 +44,7 @@ def read_favorite_courses(
     logger.info("Getting favorite courses list of user " + str(userId))
     crud = FavoriteCourseRepository(db)
     favorites = crud.get_favorites_by_user(userId, skip=skip, limit=limit)
-    logger.debug("Getting " + str(favorites.count(FavoriteCourseDTO)) + " courses")
+    logger.debug("Getting " + str(len(favorites)) + " courses")
     return favorites
 
 

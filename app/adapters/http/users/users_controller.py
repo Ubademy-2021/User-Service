@@ -69,8 +69,9 @@ def read_user(
         logger.info("Getting user with email = " + email)
         users.append(UserUtil.check_email_exists(db, email))
     else:
+        logger.info("Getting all users")
         users = crud.get_users(skip=skip, limit=limit)
-        logger.debug("Getting all users")
+        logger.debug("Getting " + str(len(users)) + " users")
         return users
 
     return users
@@ -78,8 +79,10 @@ def read_user(
 
 @router.get("/users/active", response_model=List[User])
 def read_active_users(db: Session = Depends(get_db)):
+    logger.info("Getting all active users")
     crud = UserRepository(db)
     users = crud.get_active_users()
+    logger.debug("Getting " + str(len(users)) + " users")
 
     return users
 
