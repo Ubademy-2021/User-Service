@@ -87,7 +87,7 @@ def read_active_users(db: Session = Depends(get_db)):
     return users
 
 
-@router.post("/users/block/{user_id}", response_model=User)
+@router.put("/users/block/{user_id}", response_model=User)
 def block_user(user_id: int, db: Session = Depends(get_db)):
     logger.info("Creating user " + str(user_id))
     crud = UserRepository(db)
