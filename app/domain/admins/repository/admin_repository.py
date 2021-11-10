@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
-from app.domain.admins.model.admin import AdminBase
 from app.adapters.database.admins.model import AdminDTO
+from app.domain.admins.model.admin import AdminBase
+from sqlalchemy.orm import Session
 
 
 class AdminRepository:

@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
-
 from app.adapters.database.favoriteCourses.model import FavoriteCourseDTO
 from app.domain.favoriteCourses.model.favoriteCourse import FavoriteCourse
+from sqlalchemy.orm import Session
 
 
 class FavoriteCourseRepository:

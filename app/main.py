@@ -1,12 +1,14 @@
 import os
+
 import uvicorn
 from fastapi import FastAPI, status
-from app.adapters.http.users import users_controller
-from app.adapters.http.categories import categories_controller
-from app.adapters.http.admins import admins_controller
-from app.adapters.http.favoriteCourses import favoriteCoursesController
-from app.adapters.database.users.model import Base
+
 from app.adapters.database.database import engine
+from app.adapters.database.users.model import Base
+from app.adapters.http.admins import admins_controller
+from app.adapters.http.categories import categories_controller
+from app.adapters.http.favoriteCourses import favoriteCoursesController
+from app.adapters.http.users import users_controller
 from app.core.logger import logger
 
 Base.metadata.create_all(bind=engine)

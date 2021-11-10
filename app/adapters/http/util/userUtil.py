@@ -1,8 +1,7 @@
-
-from sqlalchemy.orm import Session
-from app.domain.users.repository.user_repository import UserRepository
 from app.core.logger import logger
+from app.domain.users.repository.user_repository import UserRepository
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 
 class UserUtil:
