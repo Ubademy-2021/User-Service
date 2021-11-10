@@ -11,7 +11,7 @@ class AdminUtil:
         adminRepository = AdminRepository(session)
         db_admin = adminRepository.get_admin_by_email(email=email)
         if db_admin:
-            logger.warn("Admin " + email + " already exsists")
+            logger.warning("Admin " + email + " already exsists")
             raise HTTPException(
                 status_code=400, detail="Email " + email + " already registered"
             )

@@ -30,7 +30,7 @@ def get_db():
 def add_favorite_course(favoriteCourse: FavoriteCourse, db: Session = Depends(get_db)):
     logger.info("Adding course to favorites")
     if not favoriteCourse.userId or not favoriteCourse.courseId:
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = FavoriteCourseRepository(db)
     FavoriteCourseUtil.check_favorite_course(db, favoriteCourse)
@@ -46,3 +46,13 @@ def read_favorite_courses(
     favorites = crud.get_favorites_by_user(userId, skip=skip, limit=limit)
     logger.debug("Getting " + str(favorites.count(FavoriteCourseDTO)) + " courses")
     return favorites
+
+
+@router.delete("/users/favorites")
+def delete_course_from_favorites(favoriteCourse: FavoriteCourse, db: Session = Depends(get_db)):
+    logger.info("Removing course from favorites")
+    fc = FavoriteCourseUtil.check_favorite_exists(db, favoriteCourse)
+    repo = FavoriteCourseRepository(db)
+    repo.delete_favorite_course(fc)
+    logger.info("Course removed from favorites")
+    return "Course removed from favorites"

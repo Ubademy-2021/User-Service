@@ -29,7 +29,7 @@ def get_db():
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     logger.info("Creating user " + user.email)
     if not user.isComplete():
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserRepository(db)
     UserUtil.check_email(db, user.email)
@@ -90,7 +90,7 @@ def block_user(user_id: int, db: Session = Depends(get_db)):
     crud = UserRepository(db)
     db_user = UserUtil.check_user_exists(db, user_id)
     if db_user.isBlock:
-        logger.warn("User " + str(user_id) + " already blocked")
+        logger.warning("User " + str(user_id) + " already blocked")
         raise HTTPException(
             status_code=400, detail=("User " + str(user_id) + " already blocked")
         )

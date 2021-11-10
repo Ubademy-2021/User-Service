@@ -32,3 +32,7 @@ class FavoriteCourseRepository:
         self.session.commit()
         self.session.refresh(session_favoriteCourse)
         return session_favoriteCourse
+
+    def delete_favorite_course(self, favoriteCourse: FavoriteCourseDTO):
+        self.session.delete(favoriteCourse)
+        self.session.commit()

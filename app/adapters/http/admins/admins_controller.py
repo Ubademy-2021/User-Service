@@ -53,7 +53,7 @@ def read_admin(
 def create_admin(admin: AdminBase, db: Session = Depends(get_db)):
     logger.info("Creating admin " + admin.email)
     if not admin.isComplete():
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = AdminRepository(db)
     AdminUtil.check_email(db, admin.email)

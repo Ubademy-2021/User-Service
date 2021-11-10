@@ -11,7 +11,7 @@ class UserUtil:
         userRepository = UserRepository(session)
         db_user = userRepository.get_user_by_username(username=username)
         if db_user:
-            logger.warn("Username " + username + " already in use")
+            logger.warning("Username " + username + " already in use")
             raise HTTPException(
                 status_code=400, detail="Username " + username + " already in use"
             )
@@ -20,7 +20,7 @@ class UserUtil:
         userRepository = UserRepository(session)
         db_user = userRepository.get_user_by_email(email=email)
         if db_user:
-            logger.warn("User " + email + " already exsists")
+            logger.warning("User " + email + " already exsists")
             raise HTTPException(
                 status_code=400, detail="Email " + email + " already registered"
             )

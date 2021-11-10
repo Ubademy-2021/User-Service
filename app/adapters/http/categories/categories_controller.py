@@ -38,7 +38,7 @@ def read_categories_from_user(
 def create_user_category(userCategory: UserCategory, db: Session = Depends(get_db)):
     logger.info("Adding category to user")
     if not userCategory.userId or not userCategory.categoryId:
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserCategoryRepository(db)
     CategoryUtil.check_user_category(db, userCategory)
