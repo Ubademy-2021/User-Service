@@ -30,7 +30,7 @@ def read_categories_from_user(
     logger.info("Getting categories list of user " + str(userId))
     crud = UserCategoryRepository(db)
     categories = crud.get_categories_by_user(userId, skip=skip, limit=limit)
-    logger.debug("Getting " + str(categories.count(UserCategoryDTO)) + " categories")
+    logger.debug("Getting " + str(len(categories)) + " categories")
     return categories
 
 
@@ -38,7 +38,7 @@ def read_categories_from_user(
 def create_user_category(userCategory: UserCategory, db: Session = Depends(get_db)):
     logger.info("Adding category to user")
     if not userCategory.userId or not userCategory.categoryId:
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = UserCategoryRepository(db)
     CategoryUtil.check_user_category(db, userCategory)

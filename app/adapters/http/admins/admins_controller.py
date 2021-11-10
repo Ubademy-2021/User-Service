@@ -37,13 +37,14 @@ def read_admin(
 
     if admin_id:
         logger.info("Getting admin with id = " + str(admin_id))
-        admins.append(AdminUtil.check_id_exists(crud, admin_id))
+        admins.append(AdminUtil.check_admin_exists(db, admin_id))
     elif email:
         logger.info("Getting admin with email = " + email)
-        admins.append(AdminUtil.check_email_exists(crud, email))
+        admins.append(AdminUtil.check_email_exists(db, email))
     else:
+        logger.info("Getting all admins")
         admins = crud.get_admins(skip=skip, limit=limit)
-        logger.debug("Getting all admins")
+        logger.debug("Getting " + str(len(admins)) + " admins")
         return admins
 
     return admins
@@ -53,8 +54,8 @@ def read_admin(
 def create_admin(admin: AdminBase, db: Session = Depends(get_db)):
     logger.info("Creating admin " + admin.email)
     if not admin.isComplete():
-        logger.warn("Required fields are not complete")
+        logger.warning("Required fields are not complete")
         raise HTTPException(status_code=400, detail="Required fields are not complete")
     crud = AdminRepository(db)
-    AdminUtil.check_email(crud, admin.email)
+    AdminUtil.check_email(db, admin.email)
     return crud.create_admin(admin=admin)
