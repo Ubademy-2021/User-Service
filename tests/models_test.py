@@ -51,8 +51,6 @@ def make_default_userCreate():
 
 
 class TestDatabaseModelsInit(unittest.TestCase):
-    def test_testing(self):
-        assert "prueba" == "prueba"
 
     def test_admin_init(self):
         adminCreate = make_default_adminBase()
