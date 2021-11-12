@@ -11,7 +11,7 @@ class CourseServiceUtil:
     def check_course_exists(id):
         logger.info("Checking if course with id: " + str(id) + " exists")
 
-        url = HEROKU_COURSE_SERVICE_BASE_URL + "/api/courses/" + str(id)
+        url = HEROKU_COURSE_SERVICE_BASE_URL + "/api/courses?course_id=" + str(id)
         r = requests.get(url=url)
 
         if r.status_code != 200:
