@@ -37,7 +37,7 @@ class CourseServiceUtil:
     def getAllCategories():
         logger.info("Getting all categories")
 
-        url = HEROKU_COURSE_SERVICE_BASE_URL + "/api/categories/all"
+        url = HEROKU_COURSE_SERVICE_BASE_URL + "/api/categories/all/"
         r = requests.get(url=url)
 
         if r.status_code != 200:
