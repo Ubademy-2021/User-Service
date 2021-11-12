@@ -1,17 +1,13 @@
 from app.adapters.database.database import SessionLocal
-from fastapi import Depends, APIRouter, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
 from app.adapters.database.favoriteCourses.model import FavoriteCourseDTO
 from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.adapters.http.util.favoriteCourseUtil import FavoriteCourseUtil
 from app.core.logger import logger
 from app.domain.favoriteCourses.model.favoriteCourse import FavoriteCourse
-from app.domain.favoriteCourses.repository.favoriteCourseRepository import FavoriteCourseRepository
-from app.domain.userCategories.model.userCategory import UserCategory
-from app.domain.userCategories.repository.userCategoryRepository import UserCategoryRepository
-from app.adapters.http.util.categoryUtil import CategoryUtil
-
+from app.domain.favoriteCourses.repository.favoriteCourseRepository import \
+    FavoriteCourseRepository
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 router = APIRouter(tags=["favoriteCourses"])
 

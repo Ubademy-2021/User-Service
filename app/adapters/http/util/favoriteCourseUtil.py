@@ -1,11 +1,11 @@
-from sqlalchemy.orm import Session
 from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.adapters.http.util.userUtil import UserUtil
 from app.core.logger import logger
-from fastapi import HTTPException
-
 from app.domain.favoriteCourses.model.favoriteCourse import FavoriteCourse
-from app.domain.favoriteCourses.repository.favoriteCourseRepository import FavoriteCourseRepository
+from app.domain.favoriteCourses.repository.favoriteCourseRepository import \
+    FavoriteCourseRepository
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 
 class FavoriteCourseUtil:

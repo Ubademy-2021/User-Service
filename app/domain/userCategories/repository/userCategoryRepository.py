@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
-
 from app.adapters.database.userCategories.model import UserCategoryDTO
 from app.domain.userCategories.model.userCategory import UserCategory
+from sqlalchemy.orm import Session
 
 
 class UserCategoryRepository:

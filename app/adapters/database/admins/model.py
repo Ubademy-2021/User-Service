@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String
 from app.adapters.database.database import Base
 from app.domain.admins.model.admin import AdminBase
+from sqlalchemy import Column, Integer, String
 
 # catedra hacen Base=declarative_base()
 

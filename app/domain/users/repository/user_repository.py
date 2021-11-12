@@ -1,8 +1,7 @@
-from sqlalchemy.orm import Session
-from starlette.exceptions import HTTPException
+from app.adapters.database.users.model import UserDTO
 from app.domain.exceptions.user_not_found_error import UserNotFoundError
 from app.domain.users.model.user import User, UserCreate
-from app.adapters.database.users.model import UserDTO
+from sqlalchemy.orm import Session
 
 
 class UserRepository:

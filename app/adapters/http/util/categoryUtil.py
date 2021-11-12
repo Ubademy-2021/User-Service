@@ -1,11 +1,11 @@
 from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.adapters.http.util.userUtil import UserUtil
-from app.domain.users.repository.user_repository import UserRepository
-from app.domain.userCategories.repository.userCategoryRepository import UserCategoryRepository
-from app.domain.userCategories.model.userCategory import UserCategory
-from sqlalchemy.orm import Session
 from app.core.logger import logger
+from app.domain.userCategories.model.userCategory import UserCategory
+from app.domain.userCategories.repository.userCategoryRepository import \
+    UserCategoryRepository
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 
 class CategoryUtil:

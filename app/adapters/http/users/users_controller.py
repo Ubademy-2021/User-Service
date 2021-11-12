@@ -1,15 +1,13 @@
+from typing import List, Optional
+
 from app.adapters.database.database import SessionLocal
-from app.adapters.database.users.model import UserDTO
-from app.domain.exceptions.user_not_found_error import UserNotFoundError
-from app.domain.users.model.user import UserCreate, User
-from app.domain.email import Email
-from app.domain.users.repository.user_repository import UserRepository
-from fastapi import Depends, APIRouter, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
-from app.core.logger import logger
 from app.adapters.http.util.userUtil import UserUtil
-from typing import Optional
+from app.core.logger import logger
+from app.domain.exceptions.user_not_found_error import UserNotFoundError
+from app.domain.users.model.user import User, UserCreate
+from app.domain.users.repository.user_repository import UserRepository
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 router = APIRouter(tags=["users"])
 

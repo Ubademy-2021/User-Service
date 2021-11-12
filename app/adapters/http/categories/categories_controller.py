@@ -1,14 +1,13 @@
 from app.adapters.database.database import SessionLocal
 from app.adapters.database.userCategories.model import UserCategoryDTO
-from fastapi import Depends, APIRouter, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
+from app.adapters.http.util.categoryUtil import CategoryUtil
 from app.adapters.http.util.courseServiceUtil import CourseServiceUtil
 from app.core.logger import logger
 from app.domain.userCategories.model.userCategory import UserCategory
-from app.domain.userCategories.repository.userCategoryRepository import UserCategoryRepository
-from app.adapters.http.util.categoryUtil import CategoryUtil
-
+from app.domain.userCategories.repository.userCategoryRepository import \
+    UserCategoryRepository
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 router = APIRouter(tags=["categories"])
 

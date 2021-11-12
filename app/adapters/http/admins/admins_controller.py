@@ -1,14 +1,13 @@
-from starlette.exceptions import HTTPException
+from typing import List, Optional
+
 from app.adapters.database.database import SessionLocal
-from app.adapters.database.admins.model import AdminDTO
+from app.adapters.http.util.adminUtil import AdminUtil
+from app.core.logger import logger
 from app.domain.admins.model.admin import Admin, AdminBase
 from app.domain.admins.repository.admin_repository import AdminRepository
-from app.adapters.http.util.adminUtil import AdminUtil
-from fastapi import Depends, APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from typing import List, Optional
-from app.core.logger import logger
-
+from starlette.exceptions import HTTPException
 
 router = APIRouter(tags=["admins"])
 

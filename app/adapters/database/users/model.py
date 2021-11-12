@@ -1,10 +1,7 @@
-from sqlalchemy import Boolean, Column, Integer, String
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.expression import null
 from app.adapters.database.database import Base
 from app.domain.users.model.user import UserCreate
-
-# catedra hacen Base=declarative_base()
+from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class UserDTO(Base):
