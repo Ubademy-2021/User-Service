@@ -87,7 +87,7 @@ def read_active_users(db: Session = Depends(get_db)):
 
 @router.put("/users/block/{user_id}", response_model=User)
 def block_user(user_id: int, db: Session = Depends(get_db)):
-    logger.info("Creating user " + str(user_id))
+    logger.info("Blocking user " + str(user_id))
     crud = UserRepository(db)
     db_user = UserUtil.check_user_exists(db, user_id)
     if db_user.isBlock:
@@ -96,5 +96,20 @@ def block_user(user_id: int, db: Session = Depends(get_db)):
             status_code=400, detail=("User " + str(user_id) + " already blocked")
         )
     db_user.isBlock = True
+    crud.update_user_with_id(db_user)
+    return db_user
+
+
+@router.put("/users/unblock/{user_id}", response_model=User)
+def unblock_user(user_id: int, db: Session = Depends(get_db)):
+    logger.info("Unblocking user " + str(user_id))
+    crud = UserRepository(db)
+    db_user = UserUtil.check_user_exists(db, user_id)
+    if not db_user.isBlock:
+        logger.warning("User " + str(user_id) + " not blocked")
+        raise HTTPException(
+            status_code=400, detail=("User " + str(user_id) + " not blocked")
+        )
+    db_user.isBlock = False
     crud.update_user_with_id(db_user)
     return db_user
