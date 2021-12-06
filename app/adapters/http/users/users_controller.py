@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from app.adapters.database.database import SessionLocal
+from app.adapters.http.util.paymentsServiceUtil import PaymentsServiceUtil
 from app.adapters.http.util.userUtil import UserUtil
 from app.core.logger import logger
 from app.domain.exceptions.user_not_found_error import UserNotFoundError
@@ -32,7 +33,9 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     crud = UserRepository(db)
     UserUtil.check_email(db, user.email)
     UserUtil.check_username(db, user.userName)
-    return crud.create_user(user=user)
+    user = crud.create_user(user=user)
+    PaymentsServiceUtil.makeUserWallet(user.id)
+    return user
 
 
 @router.put("/users/{user_id}", response_model=User)
