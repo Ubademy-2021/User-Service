@@ -11,3 +11,5 @@ POSTGRES_DB = "dcmlmhd3ipa6a5"
 DATABASE_URL = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 HEROKU_COURSE_SERVICE_BASE_URL = os.environ.get('HEROKU_COURSE_SERVICE_BASE_URL', "https://course-service-ubademy.herokuapp.com")
+
+HEROKU_PAYMENTS_SERVICE_BASE_URL = os.environ.get('HEROKU_PAYMENTS_SERVICE_BASE_URL', "https://ubademy-payments-service.herokuapp.com")
