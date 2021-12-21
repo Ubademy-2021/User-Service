@@ -4,3 +4,14 @@
 [![Deploy](https://github.com/Ubademy-2021/User-Service/actions/workflows/deploy.yml/badge.svg)](https://github.com/Ubademy-2021/User-Service/actions/workflows/deploy.yml)
 
 # User-Service
+
+This service manages all user's access to Ubademy application.
+
+## Database Diagram
+
+![Database diagrama - User Service](/assets/bdd-user-service.png "Database diagrama - User Service")
+
+
+## Links of interest
+[API Documentation](https://ubademy-user-service.herokuapp.com/docs#)
+
